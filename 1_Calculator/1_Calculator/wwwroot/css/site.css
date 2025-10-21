@@ -1,0 +1,129 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+/* Стили для калькулятора */
+.calculator-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.calculator {
+  background: linear-gradient(145deg, #f0f0f0, #cacaca);
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 20px 20px 60px #bebebe, -20px -20px 60px #ffffff;
+  max-width: 300px;
+  width: 100%;
+}
+
+.display {
+  margin-bottom: 20px;
+}
+
+.display input {
+  width: 100%;
+  height: 60px;
+  font-size: 24px;
+  text-align: right;
+  border: none;
+  border-radius: 10px;
+  background: #000;
+  color: #0f0;
+  padding: 0 15px;
+  font-family: 'Courier New', monospace;
+  box-shadow: inset 5px 5px 10px #000, inset -5px -5px 10px #333;
+}
+
+.buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.buttons button {
+  height: 50px;
+  border: none;
+  border-radius: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 5px 5px 10px #bebebe, -5px -5px 10px #ffffff;
+}
+
+.buttons button:hover {
+  transform: translateY(-2px);
+  box-shadow: 7px 7px 14px #bebebe, -7px -7px 14px #ffffff;
+}
+
+.buttons button:active {
+  transform: translateY(0);
+  box-shadow: 2px 2px 5px #bebebe, -2px -2px 5px #ffffff;
+}
+
+.buttons .btn-light {
+  background: linear-gradient(145deg, #ffffff, #e6e6e6);
+  color: #333;
+}
+
+.buttons .btn-warning {
+  background: linear-gradient(145deg, #ffc107, #e0a800);
+  color: #000;
+}
+
+.buttons .btn-success {
+  background: linear-gradient(145deg, #28a745, #1e7e34);
+  color: #fff;
+}
+
+.buttons .btn-secondary {
+  background: linear-gradient(145deg, #6c757d, #5a6268);
+  color: #fff;
+}
+
+.zero {
+  grid-column: span 2;
+}
+
+.equals {
+  grid-row: span 2;
+}
+
+/* Адаптивность */
+@media (max-width: 480px) {
+  .calculator {
+    max-width: 280px;
+    padding: 15px;
+  }
+  
+  .display input {
+    height: 50px;
+    font-size: 20px;
+  }
+  
+  .buttons button {
+    height: 45px;
+    font-size: 16px;
+  }
+}
