@@ -13,7 +13,7 @@ services:
       - "0.0.0.0:5066:3306"
 
   web:
-    container_name: 1_Calculator
+    container_name: 1_calculator-web
     hostname: app
     build: .
     ports:
