@@ -1,58 +1,76 @@
 using _1_Calculator.Data;
+using _1_Calculator.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
-using Microsoft.Extensions.Logging;
-//using 
-namespace Calculator.Controllers
+
+namespace _1_Calculator.Controllers
 {
-    public enum Operation { Add, Subtract, Multiply, Divide }
     public class CalculatorController : Controller
     {
-        private CalculatorContext _context;
+        private readonly CalculatorContext _context;
 
         public CalculatorController(CalculatorContext context)
         {
-            CalculatorContext _context;
+            _context = context;
         }
         
         [HttpGet]
         public IActionResult Index()
         {
-            return View();
+            var model = new CalculatorViewModel();
+            return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Calculate(double num1, double num2, Operation operation)
+        public IActionResult Calculate(CalculatorViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return View("Index", model);
+            }
+
+            if (model.Num1 == null || model.Num2 == null || model.Operation == null)
+            {
+                model.ErrorMessage = "Заполните все поля.";
+                return View("Index", model);
+            }
+
             double result = 0;
-            switch (operation)
+            switch (model.Operation.Value)
             {
                 case Operation.Add:
-                    result = num1 + num2;
+                    result = model.Num1.Value + model.Num2.Value;
                     break;
                 case Operation.Subtract:
-                    result = num1 - num2;
+                    result = model.Num1.Value - model.Num2.Value;
                     break;
                 case Operation.Multiply:
-                    result = num1 * num2;
+                    result = model.Num1.Value * model.Num2.Value;
                     break;
                 case Operation.Divide:
-                    result = num1 / num2;
+                    if (model.Num2.Value == 0)
+                    {
+                        model.ErrorMessage = "Деление на ноль запрещено.";
+                        return View("Index", model);
+                    }
+                    result = model.Num1.Value / model.Num2.Value;
                     break;
             }
-            ViewBag.Result = result;
 
-            DataInputVariant dataInputVariant = new DataInputVariant();
-            dataInputVariant.Operand_1 = num1.ToString();
-            dataInputVariant.Operand_2 = num2.ToString();
-            dataInputVariant.Type_operation = operation.ToString();
+            model.Result = result;
 
+            var dataInputVariant = new DataInputVariant
+            {
+                Operand_1 = model.Num1.Value.ToString(),
+                Operand_2 = model.Num2.Value.ToString(),
+                Type_operation = model.Operation.Value.ToString()
+            };
             _context.DataInputVariants.Add(dataInputVariant);
             _context.SaveChanges();
 
-            return View("Index");
+            return View("Index", model);
         }
     }
 }
+
 

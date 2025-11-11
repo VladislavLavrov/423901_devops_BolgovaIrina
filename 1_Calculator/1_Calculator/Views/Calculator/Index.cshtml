@@ -1,125 +1,36 @@
+@model _1_Calculator.Models.CalculatorViewModel
 @{
     ViewData["Title"] = "Калькулятор";
 }
-
-<div class="text-center">
-    <h1 class="display-4">Болгова Ирина НМТ-423901</h1>
-    <h2 class="mb-4">Простой калькулятор</h2>
-    
-    <div class="calculator-container">
-        <div class="calculator">
-            <form method="post" asp-action="Calculate" id="calculatorForm">
-                @Html.AntiForgeryToken()
-                <div class="display">
-                    <input type="text" id="display" name="display" readonly value="@(ViewBag.Result != null ? ViewBag.Result.ToString() : "0")">
-                    <input type="hidden" id="num1" name="num1" value="">
-                    <input type="hidden" id="num2" name="num2" value="">
-                    <input type="hidden" id="operation" name="operation" value="">
-                </div>
-                <div class="buttons">
-                    <button type="button" class="btn btn-secondary" onclick="clearDisplay()">C</button>
-                    <button type="button" class="btn btn-secondary" onclick="deleteLast()">⌫</button>
-                    <button type="button" class="btn btn-warning" onclick="appendOperator('Divide')">/</button>
-                    <button type="button" class="btn btn-warning" onclick="appendOperator('Multiply')">×</button>
-                    
-                    <button type="button" class="btn btn-light" onclick="appendNumber('7')">7</button>
-                    <button type="button" class="btn btn-light" onclick="appendNumber('8')">8</button>
-                    <button type="button" class="btn btn-light" onclick="appendNumber('9')">9</button>
-                    <button type="button" class="btn btn-warning" onclick="appendOperator('Subtract')">-</button>
-                    
-                    <button type="button" class="btn btn-light" onclick="appendNumber('4')">4</button>
-                    <button type="button" class="btn btn-light" onclick="appendNumber('5')">5</button>
-                    <button type="button" class="btn btn-light" onclick="appendNumber('6')">6</button>
-                    <button type="button" class="btn btn-warning" onclick="appendOperator('Add')">+</button>
-                    
-                    <button type="button" class="btn btn-light" onclick="appendNumber('1')">1</button>
-                    <button type="button" class="btn btn-light" onclick="appendNumber('2')">2</button>
-                    <button type="button" class="btn btn-light" onclick="appendNumber('3')">3</button>
-                    <button type="button" class="btn btn-success equals" onclick="submitCalculation()" rowspan="2">=</button>
-                    
-                    <button type="button" class="btn btn-light zero" onclick="appendNumber('0')">0</button>
-                    <button type="button" class="btn btn-light" onclick="appendDecimal()">.</button>
-                </div>
-            </form>
-        </div>
+<h2>@ViewData["Title"]</h2>
+<form asp-controller="Calculator" asp-action="Calculate" method="post">
+    @Html.AntiForgeryToken()
+    <div class="mb-3">
+        <label asp-for="Num1" class="form-label">Первое число</label>
+        <input asp-for="Num1" class="form-control" />
     </div>
-</div>
-
-@section Scripts {
-    <script>
-        let currentInput = '@(ViewBag.Result != null ? ViewBag.Result.ToString() : "0")';
-        let operator = null;
-        let previousInput = null;
-        let shouldResetDisplay = false;
-
-        function updateDisplay() {
-            document.getElementById('display').value = currentInput;
-        }
-
-        function appendNumber(number) {
-            if (shouldResetDisplay) {
-                currentInput = number;
-                shouldResetDisplay = false;
-            } else {
-                currentInput = currentInput === '0' ? number : currentInput + number;
-            }
-            updateDisplay();
-        }
-
-        function appendDecimal() {
-            if (shouldResetDisplay) {
-                currentInput = '0.';
-                shouldResetDisplay = false;
-            } else if (currentInput.indexOf('.') === -1) {
-                currentInput += '.';
-            }
-            updateDisplay();
-        }
-
-        function appendOperator(op) {
-            if (operator && !shouldResetDisplay) {
-                submitCalculation();
-                return;
-            }
-            
-            operator = op;
-            previousInput = currentInput;
-            shouldResetDisplay = true;
-        }
-
-        function submitCalculation() {
-            if (operator && previousInput !== null) {
-                const num1 = parseFloat(previousInput);
-                const num2 = parseFloat(currentInput);
-                
-                if (operator === 'Divide' && num2 === 0) {
-                    alert('Ошибка: деление на ноль!');
-                    return;
-                }
-                
-                document.getElementById('num1').value = num1;
-                document.getElementById('num2').value = num2;
-                document.getElementById('operation').value = operator;
-                document.getElementById('calculatorForm').submit();
-            }
-        }
-
-        function clearDisplay() {
-            currentInput = '0';
-            operator = null;
-            previousInput = null;
-            shouldResetDisplay = false;
-            updateDisplay();
-        }
-
-        function deleteLast() {
-            if (currentInput.length > 1) {
-                currentInput = currentInput.slice(0, -1);
-            } else {
-                currentInput = '0';
-            }
-            updateDisplay();
-        }
-    </script>
+    <div class="mb-3">
+        <label asp-for="Operation" class="form-label">Операция</label>
+        <select asp-for="Operation" class="form-select">
+            <option value="Add">+</option>
+            <option value="Subtract">-</option>
+            <option value="Multiply">*</option>
+            <option value="Divide">/</option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Num2" class="form-label">Второе число</label>
+        <input asp-for="Num2" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Посчитать</button>
+</form>
+@if (!string.IsNullOrWhiteSpace(Model?.ErrorMessage))
+{
+    <div class="text-danger mt-3">@Model.ErrorMessage</div>
 }
+@if (Model?.Result != null)
+{
+    <h3 class="mt-3">Результат: @Model.Result</h3>
+}
+
 
