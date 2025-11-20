@@ -1,15 +1,21 @@
 using _1_Calculator.Data;
 using _1_Calculator.Models;
+using _1_Calculator.Services;
+using Confluent.Kafka;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
+
 
 namespace _1_Calculator.Controllers
 {
     public class CalculatorController : Controller
     {
         private readonly CalculatorContext _context;
+        private readonly KafkaProducerService<Null, string> _producer;
 
-        public CalculatorController(CalculatorContext context)
+        public CalculatorController(CalculatorContext context, KafkaProducerService<Null, string> producer)
         {
+            _producer = producer;
             _context = context;
         }
         
@@ -22,53 +28,36 @@ namespace _1_Calculator.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Calculate(CalculatorViewModel model)
+        public async Task<IActionResult> Calculate(double num1, double num2, Operation operation)
         {
-            if (!ModelState.IsValid)
-            {
-                return View("Index", model);
-            }
-
-            if (model.Num1 == null || model.Num2 == null || model.Operation == null)
-            {
-                model.ErrorMessage = "Заполните все поля.";
-                return View("Index", model);
-            }
-
-            double result = 0;
-            switch (model.Operation.Value)
-            {
-                case Operation.Add:
-                    result = model.Num1.Value + model.Num2.Value;
-                    break;
-                case Operation.Subtract:
-                    result = model.Num1.Value - model.Num2.Value;
-                    break;
-                case Operation.Multiply:
-                    result = model.Num1.Value * model.Num2.Value;
-                    break;
-                case Operation.Divide:
-                    if (model.Num2.Value == 0)
-                    {
-                        model.ErrorMessage = "Деление на ноль запрещено.";
-                        return View("Index", model);
-                    }
-                    result = model.Num1.Value / model.Num2.Value;
-                    break;
-            }
-
-            model.Result = result;
-
             var dataInputVariant = new DataInputVariant
             {
-                Operand_1 = model.Num1.Value.ToString(),
-                Operand_2 = model.Num2.Value.ToString(),
-                Type_operation = model.Operation.Value.ToString()
+                Operand_1 = num1,
+                Operand_2 = num2,
+                Type_operation = operation,
             };
-            _context.DataInputVariants.Add(dataInputVariant);
-            _context.SaveChanges();
+            // Отправка данных в Kafka
+            await SendDataToKafka(dataInputVariant);
+            // Перенаправление на страницу Index
+            return RedirectToAction(nameof(Index));
+        }
 
-            return View("Index", model);
+        public IActionResult Callback([FromBody] DataInputVariant inputData)
+        {
+            SaveDataAndResult(inputData);
+            return Ok();
+        }
+        private DataInputVariant SaveDataAndResult(DataInputVariant inputData)
+        {
+            _context.DataInputVariants.Add(inputData);
+            _context.SaveChanges();
+            return inputData;
+        }
+        private async Task SendDataToKafka(DataInputVariant dataInputVariant)
+        {
+            var json = JsonSerializer.Serialize(dataInputVariant);
+            await _producer.ProduceAsync("1_Calculator", new Message<Null, string>
+            { Value = json });
         }
     }
 }

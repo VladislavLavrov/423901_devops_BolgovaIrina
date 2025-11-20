@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using _1_Calculator.Data;
 
@@ -10,9 +11,11 @@ using _1_Calculator.Data;
 namespace _1_Calculator.Migrations
 {
     [DbContext(typeof(CalculatorContext))]
-    partial class CalculatorContextModelSnapshot : ModelSnapshot
+    [Migration("20251113100508_1234567897464")]
+    partial class _1234567897464
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,17 +32,14 @@ namespace _1_Calculator.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("ID_DataInputVariant"));
 
-                    b.Property<double>("Operand_1")
-                        .HasColumnType("double");
-
-                    b.Property<double>("Operand_2")
-                        .HasColumnType("double");
-
-                    b.Property<string>("Result")
+                    b.Property<string>("Operand_1")
                         .HasColumnType("varchar(128)");
 
-                    b.Property<int>("Type_operation")
-                        .HasColumnType("int");
+                    b.Property<string>("Operand_2")
+                        .HasColumnType("varchar(128)");
+
+                    b.Property<string>("Type_operation")
+                        .HasColumnType("varchar(128)");
 
                     b.HasKey("ID_DataInputVariant");
 

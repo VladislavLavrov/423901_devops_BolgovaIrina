@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using _1_Calculator.Data;
 
@@ -10,9 +11,11 @@ using _1_Calculator.Data;
 namespace _1_Calculator.Migrations
 {
     [DbContext(typeof(CalculatorContext))]
-    partial class CalculatorContextModelSnapshot : ModelSnapshot
+    [Migration("20251120102520_4857646445454")]
+    partial class _4857646445454
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
