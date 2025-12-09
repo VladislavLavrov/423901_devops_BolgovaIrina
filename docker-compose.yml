@@ -22,3 +22,6 @@ services:
           - web
         networks:
           - metrics-net
+networks:
+  metrics-net:
+    name: metrics-net
