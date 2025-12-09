@@ -8,13 +8,13 @@ pipeline {
     }
     stage('Build Docker Image') {
       steps {
-        sh 'ls -l'
-        sh 'docker compose build'
+        sh 'cd 1_Calculator/1_Calculator && ls -l'
+        sh 'cd 1_Calculator/1_Calculator && docker compose build'
       }
     }
     stage('Start Docker Container') {
       steps {
-        sh 'docker compose up -d'
+        sh 'cd 1_Calculator/1_Calculator && docker compose up -d'
       }
     }
   }
