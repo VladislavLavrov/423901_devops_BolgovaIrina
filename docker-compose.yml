@@ -1,0 +1,24 @@
+services:
+    web:
+        container_name: 1_calculator-web
+        hostname: app
+        build: 1_Calculator/1_Calculator
+        ports:
+          - "5001:5001"
+        networks:
+          - metrics-net    
+    prometheus:
+        image: prom/prometheus:latest
+        user: root
+        volumes:
+          - ./prometheus.yml:/etc/prometheus/prometheus.yml
+          - ./prometheus/data:/prometheus:rw
+        command:
+          - '--config.file=/etc/prometheus/prometheus.yml'
+          - '--storage.tsdb.path=/prometheus'
+        ports:
+          - "9104:9090"
+        depends_on:
+          - web
+        networks:
+          - metrics-net
