@@ -44,5 +44,5 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapRazorPages();
-
+app.MapPrometheusScrapingEndpoint();
 app.Run();
