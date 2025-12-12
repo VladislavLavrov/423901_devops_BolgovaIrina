@@ -4,4 +4,4 @@ services:
     hostname: app
     build: 1_Calculator/1_Calculator/
     ports:
-      - "0.0.0.0:5201:5001"
+      - "0.0.0.0:5001:5001"
