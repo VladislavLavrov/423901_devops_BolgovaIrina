@@ -8,17 +8,13 @@ namespace PasswordManager.Models
 
         [Required]
         [EmailAddress]
-        [StringLength(100)]
-        public string Email { get; set; }
+        [MaxLength(100)]
+        public string Email { get; set; } = string.Empty; // Инициализация по умолчанию
 
         [Required]
-        [StringLength(255)]
-        public string PasswordHash { get; set; }
+        [MaxLength(255)]
+        public string PasswordHash { get; set; } = string.Empty; // Инициализация по умолчанию
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
-        // Навигация
-        public ICollection<Folder> Folders { get; set; }
-        public ICollection<Password> Passwords { get; set; }
     }
 }
