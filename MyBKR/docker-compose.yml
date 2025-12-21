@@ -1,0 +1,7 @@
+services:
+  web:
+    container_name: PasswordManager
+    hostname: app
+    build: ./PasswordManager
+    ports:
+      - "0.0.0.0:5001:8080"

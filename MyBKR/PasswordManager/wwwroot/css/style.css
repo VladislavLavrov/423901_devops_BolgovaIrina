@@ -1,0 +1,607 @@
+﻿* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #f8f9fc;
+    color: #333;
+    line-height: 1.5;
+}
+
+/* Заголовок */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 30px;
+    background: #ffffff;
+    border-bottom: 1px solid #e0e0e0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+    header h1 {
+        margin: 0;
+        font-size: 1.6em;
+        color: #2c3e50;
+        font-weight: 600;
+    }
+
+    header button {
+        padding: 10px 16px;
+        background: #e74c3c;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background 0.2s;
+    }
+
+        header button:hover {
+            background: #c0392b;
+        }
+
+        header button i {
+            margin-right: 5px;
+        }
+
+/* Поиск */
+.search-container {
+    padding: 12px 20px;
+    background: white;
+    border-bottom: 1px solid #e0e0e0;
+    position: relative;
+}
+
+    .search-container .search-icon {
+        position: absolute;
+        left: 32px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #aaa;
+        font-size: 14px;
+    }
+
+#searchInput {
+    width: 100%;
+    padding: 10px 10px 10px 36px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    background: #f9f9f9;
+    transition: border 0.2s;
+}
+
+    #searchInput:focus {
+        outline: none;
+        border-color: #007bff;
+        background: white;
+    }
+
+/* Основной макет */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    height: 100vh;
+}
+
+.main-layout {
+    display: flex;
+    height: calc(100vh - 80px);
+}
+
+/* Сайдбар */
+.sidebar {
+    width: 280px;
+    background: #ffffff;
+    padding: 20px;
+    border-right: 1px solid #e0e0e0;
+    overflow-y: auto;
+}
+
+    .sidebar .folder-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+
+        .sidebar .folder-header h3 {
+            margin: 0;
+            font-size: 1.1em;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+    .sidebar button#addFolderBtn {
+        width: auto;
+        padding: 6px 10px;
+        background: #007bff;
+        border: none;
+        border-radius: 4px;
+        font-size: 12px;
+    }
+
+#allFoldersBtn {
+    width: 100%;
+    padding: 12px;
+    background: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    text-align: left;
+    font-size: 14px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+    #allFoldersBtn:hover {
+        background: #5a6268;
+    }
+
+    #allFoldersBtn.active {
+        background: #007bff;
+        font-weight: 500;
+    }
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+    .sidebar ul li {
+        padding: 10px 12px;
+        margin: 4px 0;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: background 0.2s;
+    }
+
+        .sidebar ul li:hover {
+            background: #f1f3f5;
+        }
+
+        .sidebar ul li.active {
+            background: #007bff;
+            color: white;
+        }
+
+        .sidebar ul li span {
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .sidebar ul li button {
+            background: none;
+            border: none;
+            color: inherit;
+            cursor: pointer;
+            font-size: 12px;
+            opacity: 0.6;
+            transition: opacity 0.2s;
+        }
+
+            .sidebar ul li button:hover {
+                opacity: 1;
+            }
+
+/* Основной контент */
+.content {
+    flex: 1;
+    padding: 20px;
+    background: #f8f9fc;
+}
+
+.content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+#currentFolder {
+    font-size: 1.4em;
+    font-weight: 500;
+    color: #2c3e50;
+}
+
+    #currentFolder i {
+        color: #007bff;
+        margin-right: 8px;
+    }
+
+#addPasswordBtn {
+    padding: 10px 16px;
+    background: #28a745;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+    #addPasswordBtn:hover {
+        background: #218838;
+    }
+
+/* Карточки паролей */
+.password-card {
+    background: white;
+    padding: 18px;
+    margin-bottom: 14px;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+    border: 1px solid #e9ecef;
+    transition: all 0.2s ease;
+}
+
+    .password-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    }
+
+    .password-card h4 {
+        margin: 0 0 10px 0;
+        font-size: 1.1em;
+        color: #2c3e50;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+        .password-card h4 i {
+            color: #007bff;
+            font-size: 16px;
+        }
+
+    .password-card p {
+        margin: 6px 0;
+        font-size: 0.95em;
+        color: #555;
+    }
+
+        .password-card p a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+            .password-card p a:hover {
+                text-decoration: underline;
+            }
+
+    .password-card .password-mask {
+        font-family: monospace;
+        letter-spacing: 1px;
+    }
+
+    .password-card button {
+        margin: 5px 4px 0 0;
+        padding: 6px 10px;
+        font-size: 0.9em;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .password-card .show-pass {
+        background: #e9ecef;
+        color: #495057;
+    }
+
+    .password-card .edit-pass {
+        background: #007bff;
+        color: white;
+    }
+
+    .password-card .delete-pass {
+        background: #dc3545;
+        color: white;
+    }
+
+    .password-card button:hover {
+        opacity: 0.9;
+    }
+
+/* Группа полей (для генератора) */
+.input-group {
+    display: flex;
+    gap: 8px;
+}
+
+    .input-group input {
+        flex: 1;
+    }
+
+    .input-group button {
+        width: 50px;
+        padding: 10px;
+        background: #28a745;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+        .input-group button:hover {
+            background: #218838;
+        }
+
+/* --- Модальные окна --- */
+.modal {
+    display: none; /* Скрыто по умолчанию */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+    .modal.show {
+        display: flex; /* Показываем как flex */
+    }
+
+.modal-content {
+    background-color: white;
+    padding: 30px;
+    border-radius: 12px;
+    width: 460px;
+    max-width: 90%;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+    border: 1px solid #dee2e6;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+    .modal-content h3 {
+        margin: 0 0 20px 0;
+        color: #2c3e50;
+        font-size: 1.4em;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .modal-content input,
+    .modal-content textarea,
+    .modal-content select {
+        width: 100%;
+        padding: 12px;
+        margin: 10px 0;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-size: 14px;
+        transition: border 0.2s;
+    }
+
+        .modal-content input:focus,
+        .modal-content textarea:focus,
+        .modal-content select:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+        }
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+    .modal-footer button {
+        padding: 10px 18px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+        .modal-footer button:first-child {
+            background: #6c757d;
+            color: white;
+        }
+
+        .modal-footer button:last-child:not(#deletePasswordBtn):not(#deleteFolderBtn) {
+            background: #007bff;
+            color: white;
+        }
+
+        .modal-footer button:hover {
+            opacity: 0.9;
+        }
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .main-layout {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        max-height: 200px;
+    }
+
+    .content-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    #addPasswordBtn {
+        justify-content: center;
+    }
+}
+/* --- Аутентификация --- */
+.auth-container {
+    max-width: 420px;
+    margin: 80px auto;
+    background: white;
+    padding: 32px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    border: 1px solid #e0e0e0;
+    text-align: center;
+}
+
+.auth-header {
+    margin-bottom: 24px;
+}
+
+    .auth-header .auth-icon {
+        font-size: 2.5em;
+        color: #007bff;
+        margin-bottom: 12px;
+        display: block;
+    }
+
+    .auth-header h1 {
+        margin: 0;
+        font-size: 1.4em;
+        color: #2c3e50;
+        font-weight: 600;
+    }
+
+/* Вкладки */
+.tabs {
+    display: flex;
+    margin-bottom: 24px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.tab {
+    flex: 1;
+    padding: 14px;
+    border: none;
+    background: #f1f3f5;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 500;
+    color: #555;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: all 0.2s;
+}
+
+    .tab.active {
+        background: #007bff;
+        color: white;
+    }
+
+    .tab:hover:not(.active) {
+        background: #e0e0e0;
+    }
+
+/* Формы */
+.auth-form {
+    display: none;
+}
+
+    .auth-form.active {
+        display: block;
+        animation: fadeIn 0.3s ease;
+    }
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.auth-form h2 {
+    margin: 0 0 20px 0;
+    color: #2c3e50;
+    font-size: 1.3em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.input-group {
+    position: relative;
+    margin-bottom: 16px;
+}
+
+    .input-group i {
+        position: absolute;
+        left: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #aaa;
+        font-size: 14px;
+    }
+
+.auth-form input {
+    width: 100%;
+    padding: 14px 14px 14px 40px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 15px;
+    background: #f9f9f9;
+    transition: all 0.2s;
+}
+
+    .auth-form input:focus {
+        outline: none;
+        border-color: #007bff;
+        background: white;
+        box-shadow: 0 0 0 2px rgba(0,123,255,0.2);
+    }
+
+.auth-form button {
+    width: 100%;
+    padding: 14px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: background 0.2s;
+}
+
+    .auth-form button:hover {
+        background: #0056b3;
+    }
+
+/* Подвал */
+.auth-footer {
+    margin-top: 24px;
+    font-size: 13px;
+    color: #666;
+}

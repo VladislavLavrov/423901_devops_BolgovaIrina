@@ -1,0 +1,93 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🔐 Менеджер паролей</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-lock"></i> Менеджер паролей</h1>
+            <button id="logoutBtn" title="Выйти"><i class="fas fa-sign-out-alt"></i></button>
+        </header>
+
+        <div class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" id="searchInput" placeholder="Поиск по названию, логину или заметкам..." />
+        </div>
+
+        <div class="main-layout">
+            <!-- Панель папок -->
+            <aside class="sidebar">
+                <div class="folder-header">
+                    <h3><i class="fas fa-folder"></i> Папки</h3>
+                    <button id="addFolderBtn" title="Новая папка"><i class="fas fa-plus"></i></button>
+                </div>
+                <button id="allFoldersBtn"><i class="fas fa-th-large"></i> Все пароли</button>
+                <ul id="foldersList"></ul>
+            </aside>
+
+            <!-- Основная зона: пароли -->
+            <main class="content">
+                <div class="content-header">
+                    <div id="currentFolder"><i class="fas fa-folder-open"></i> <span>Все пароли</span></div>
+                    <button id="addPasswordBtn"><i class="fas fa-plus"></i> Добавить</button>
+                </div>
+                <div id="passwordsList"></div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Модальное окно: Пароль -->
+    <div id="passwordModal" class="modal" >
+        <div class="modal-content">
+            <h3 id="passwordModalTitle"><i class="fas fa-key"></i> <span>Добавить пароль</span></h3>
+            <form id="addPasswordForm" onsubmit="return false;">
+                <input type="text" id="passwordTitle" placeholder="Название (например: Google)" required />
+                <input type="text" id="passwordUsername" placeholder="Логин" required />
+                <div class="input-group">
+                    <input type="password" id="passwordValue" placeholder="Пароль" required />
+                    <button type="button" id="generatePasswordBtn" title="Сгенерировать пароль"></button>
+                </div>
+                <input type="url" id="passwordUrl" placeholder="Сайт (https://...)" />
+                <textarea id="passwordNotes" placeholder="Заметки"></textarea>
+                <select id="passwordFolderId">
+                    <option value="">Без папки</option>
+                </select>
+                <div class="modal-footer">
+                    <button type="button" id="cancelPasswordBtn">Отмена</button>
+                    <button type="button" id="savePasswordBtn">Сохранить</button>
+                    <button type="button" id="deletePasswordBtn" style="background: #dc3545; display: none;">
+                        <i class="fas fa-trash"></i> Удалить
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Модальное окно: Папка -->
+    <div id="folderModal" class="modal">
+        <div class="modal-content">
+            <h3 id="folderModalTitle"><i class="fas fa-folder-plus"></i> <span>Новая папка</span></h3>
+            <form id="addFolderForm" onsubmit="return false;">
+                <input type="text" id="folderName" placeholder="Имя папки" required />
+                <select id="parentFolderId">
+                    <option value="">Без родителя</option>
+                </select>
+                <div class="modal-footer">
+                    <button type="button" id="cancelFolderBtn">Отмена</button>
+                    <button type="button" id="saveFolderBtn">Создать</button>
+                    <button type="button" id="deleteFolderBtn" style="background: #dc3545; display: none;">
+                        <i class="fas fa-trash"></i> Удалить
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="/js/app.js"></script>
+</body>
+</html>

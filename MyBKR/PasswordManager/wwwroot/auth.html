@@ -1,0 +1,83 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🔐 Вход в Менеджер паролей</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-header">
+            <i class="fas fa-lock auth-icon"></i>
+            <h1>Менеджер паролей</h1>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" data-tab="login">
+                <i class="fas fa-sign-in-alt"></i> Вход
+            </button>
+            <button class="tab" data-tab="register">
+                <i class="fas fa-user-plus"></i> Регистрация
+            </button>
+        </div>
+
+        <!-- Форма входа -->
+        <form id="loginForm" class="auth-form active">
+            <h2><i class="fas fa-sign-in-alt"></i> Войти</h2>
+            <div class="input-group">
+                <i class="fas fa-envelope"></i>
+                <input type="email" placeholder="Email" required name="email" />
+            </div>
+            <div class="input-group">
+                <i class="fas fa-key"></i>
+                <input type="password" placeholder="Пароль" required name="password" />
+            </div>
+            <button type="submit">
+                <i class="fas fa-arrow-right"></i> Войти
+            </button>
+        </form>
+
+        <!-- Форма регистрации -->
+        <form id="registerForm" class="auth-form">
+            <h2><i class="fas fa-user-shield"></i> Создать аккаунт</h2>
+            <div class="input-group">
+                <i class="fas fa-envelope"></i>
+                <input type="email" placeholder="Email" required name="email" />
+            </div>
+            <div class="input-group">
+                <i class="fas fa-key"></i>
+                <input type="password" placeholder="Пароль" required name="password" />
+            </div>
+            <button type="submit">
+                <i class="fas fa-user-plus"></i> Зарегистрироваться
+            </button>
+        </form>
+
+        <div class="auth-footer">
+            <p>🔐 Ваши пароли шифруются локально</p>
+        </div>
+    </div>
+    <script>
+        const token = localStorage.getItem('token');
+        if (token) {
+            // Проверяем, валиден ли токен
+            fetch('/api/auth/validate', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            })
+                .then(res => {
+                    if (res.ok) {
+                        window.location.href = '/index.html';
+                    } else {
+                        localStorage.removeItem('token');
+                    }
+                })
+                .catch(() => {
+                    localStorage.removeItem('token');
+                });
+        }
+    </script>
+    <script src="/js/auth.js"></script>
+</body>
+</html>
