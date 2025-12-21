@@ -44,18 +44,19 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 
 app.UseCors("AllowAll");
+app.UseHttpsRedirection();
 
-// ВАЖНО: UseStaticFiles должен быть до UseRouting
+// Обслуживание статических файлов (фронтенд)
 app.UseStaticFiles();
 
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Map controllers
+// Маршруты API
 app.MapControllers();
 
-// Маршрут для главной страницы
+// Если запрос к корню - отдаем auth.html
 app.MapGet("/", async context =>
 {
     context.Response.ContentType = "text/html";
@@ -66,7 +67,7 @@ app.MapGet("/", async context =>
     }
     else
     {
-        await context.Response.WriteAsync("Frontend files not found. Place auth.html in wwwroot folder.");
+        await context.Response.WriteAsync("Frontend not found. Place auth.html in wwwroot folder.");
     }
 });
 
@@ -77,15 +78,13 @@ using (var scope = app.Services.CreateScope())
     {
         var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
         db.Database.EnsureCreated();
-        Console.WriteLine( База данных создана успешно!");
+        Console.WriteLine(" База данных создана успешно!");
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"Ошибка создания БД: {ex.Message}");
+        Console.WriteLine($" Ошибка создания БД: {ex.Message}");
     }
 }
 
-Console.WriteLine($"Сервер запущен: {app.Urls.FirstOrDefault()}");
-Console.WriteLine($"Статические файлы: {Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")}");
-
+Console.WriteLine($" Сервер запущен: {app.Urls.FirstOrDefault()}");
 app.Run();
