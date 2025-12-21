@@ -1,0 +1,7 @@
+services:
+  web:
+    container_name: PasswordManager
+    hostname: app
+    build: ./MyBKR/PasswordManager
+    ports:
+      - "0.0.0.0:5001:8080"
