@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>🔐 Вход в Менеджер паролей</title>
-    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="css/style.css" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
@@ -12,6 +12,17 @@
         <div class="auth-header">
             <i class="fas fa-lock auth-icon"></i>
             <h1>Менеджер паролей</h1>
+        </div>
+
+        <!-- Добавляем блок с информацией о входе -->
+        <div id="logged-in-info" style="display: none; background: #e8f5e8; padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: center;">
+            <p><i class="fas fa-check-circle" style="color: #28a745;"></i> Вы уже авторизованы</p>
+            <button id="logout-btn" style="margin-top: 10px; padding: 8px 16px; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                <i class="fas fa-sign-out-alt"></i> Выйти
+            </button>
+            <button id="go-to-dashboard" style="margin-top: 10px; padding: 8px 16px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; margin-left: 10px;">
+                <i class="fas fa-tachometer-alt"></i> Перейти в Dashboard
+            </button>
         </div>
 
         <div class="tabs">
@@ -59,25 +70,54 @@
             <p>🔐 Ваши пароли шифруются локально</p>
         </div>
     </div>
+
     <script>
+        // Проверяем, есть ли токен
         const token = localStorage.getItem('token');
+
         if (token) {
-            // Проверяем, валиден ли токен
+            // Показываем информацию о входе вместо форм
+            document.getElementById('logged-in-info').style.display = 'block';
+            document.querySelector('.tabs').style.display = 'none';
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('registerForm').style.display = 'none';
+
+            // Проверяем валидность токена
             fetch('/api/auth/validate', {
-                headers: { 'Authorization': `Bearer ${token}` }
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
             })
-                .then(res => {
-                    if (res.ok) {
-                        window.location.href = '/index.html';
-                    } else {
-                        localStorage.removeItem('token');
-                    }
-                })
-                .catch(() => {
+            .then(res => {
+                if (!res.ok) {
+                    // Токен невалиден, очищаем
                     localStorage.removeItem('token');
-                });
+                    localStorage.removeItem('user_email');
+                    location.reload();
+                }
+            })
+            .catch(() => {
+                // Ошибка сети
+                localStorage.removeItem('token');
+                localStorage.removeItem('user_email');
+                location.reload();
+            });
         }
+
+        // Обработчик кнопки выхода
+        document.getElementById('logout-btn')?.addEventListener('click', function() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user_email');
+            location.reload(); // Перезагружаем страницу
+        });
+
+        // Обработчик кнопки перехода в dashboard
+        document.getElementById('go-to-dashboard')?.addEventListener('click', function() {
+            window.location.href = 'index.html';
+        });
     </script>
-    <script src="/js/auth.js"></script>
+
+    <script src="js/auth.js"></script>
 </body>
 </html>

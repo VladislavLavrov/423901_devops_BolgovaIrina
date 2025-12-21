@@ -1,6 +1,18 @@
 ﻿<!DOCTYPE html>
 <html lang="ru">
 <head>
+    <!-- В header или навигации -->
+    <button id="logoutBtn" style="padding: 8px 16px; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer;">
+        <i class="fas fa-sign-out-alt"></i> Выйти
+    </button>
+
+    <script>
+        document.getElementById('logoutBtn').addEventListener('click', function () {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user_email');
+            window.location.href = 'auth.html';
+        });
+    </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>🔐 Менеджер паролей</title>

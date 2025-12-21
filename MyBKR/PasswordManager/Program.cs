@@ -87,4 +87,16 @@ using (var scope = app.Services.CreateScope())
 }
 
 Console.WriteLine($" Сервер запущен: {app.Urls.FirstOrDefault()}");
+
+app.MapGet("/api/test", () => Results.Ok(new
+{
+    message = "API работает",
+    time = DateTime.UtcNow,
+    endpoints = new[] {
+        "/api/auth/login",
+        "/api/auth/register",
+        "/api/auth/validate",
+        "/api/auth/test"
+    }
+}));
 app.Run();
