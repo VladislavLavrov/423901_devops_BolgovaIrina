@@ -77,15 +77,15 @@ using (var scope = app.Services.CreateScope())
     {
         var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
         db.Database.EnsureCreated();
-        Console.WriteLine("✅ База данных создана успешно!");
+        Console.WriteLine( База данных создана успешно!");
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"❌ Ошибка создания БД: {ex.Message}");
+        Console.WriteLine($"Ошибка создания БД: {ex.Message}");
     }
 }
 
-Console.WriteLine($"🚀 Сервер запущен: {app.Urls.FirstOrDefault()}");
-Console.WriteLine($"📁 Статические файлы: {Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")}");
+Console.WriteLine($"Сервер запущен: {app.Urls.FirstOrDefault()}");
+Console.WriteLine($"Статические файлы: {Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")}");
 
 app.Run();
